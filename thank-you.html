@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aquafeel Solutions — Request Received</title>
+<style>
+:root{--blue:#2e3192;--navy:#1f2270;--ink:#20252c;--muted:#526172;--line:#d6dce3;--bg:#f5f7f9}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:16px/1.48 Arial,Helvetica,sans-serif;color:var(--ink)}
+header{background:#fff;border-bottom:4px solid var(--blue)}header .head{max-width:900px;margin:auto;padding:16px 24px;display:flex;align-items:center}
+.logo{height:44px;width:auto;display:block}.logo-fallback{display:none;align-items:center;gap:8px;font-weight:700;font-size:23px}
+main{max-width:820px;margin:30px auto 65px;padding:0 18px}
+h1{font-size:32px;line-height:1.17;margin:0 0 12px;letter-spacing:-.5px}p{margin:0}.desc{color:#3f4853;max-width:750px;margin-bottom:22px}
+.panel{border:1px solid var(--line);background:#fff;box-shadow:0 1px 2px #19314c0c}
+.panel-head{background:#f8f9fa;padding:18px 24px;border-bottom:1px solid var(--line);font-size:19px;font-weight:700}
+.content{padding:24px}
+.confirm{border-left:4px solid #1d7a4c;background:#ecf7f1;padding:14px 17px;margin-bottom:23px;font-size:15px}
+.confirm strong{display:block;font-size:17px;margin-top:2px}
+.section-title{font-size:18px;font-weight:700;margin:0 0 14px}
+.steps{margin:0;padding:0;list-style:none}
+.steps li{display:flex;gap:14px;padding:14px 0;border-top:1px solid var(--line)}
+.num{flex:none;width:28px;height:28px;background:var(--blue);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+.steps b{display:block;font-size:15px}.steps span{font-size:14px;color:var(--muted)}
+.disclaimer{font-size:12px;color:#606c77;line-height:1.5;margin:20px 3px}
+@media(max-width:620px){header .head{padding:14px 18px}.logo{height:36px}h1{font-size:28px}.content{padding:18px}.panel-head{padding:15px 18px}}
+</style>
+</head>
+<body>
+<header><div class="head"><img class="logo" src="aquafeel-logo.png" alt="Aquafeel Solutions" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="logo-fallback"><svg width="24" height="31" viewBox="0 0 28 36" aria-hidden="true"><path d="M14 0C14 0 0 15 0 22a14 14 0 0 0 28 0C28 15 14 0 14 0z" fill="#2e3192"/></svg>Aquafeel Solutions</div></div></header>
+<main>
+<h1 id="h1">Thank you, your request was received</h1>
+<p class="desc" id="desc">An Aquafeel Solutions specialist will contact you shortly by phone or text to confirm your free in-home water test.</p>
+<div class="panel"><div class="panel-head" id="panel">Appointment request</div><div class="content">
+<div class="confirm" id="confirm"><span id="confLabel">Requested date and time</span><strong id="when"></strong></div>
+<div class="section-title" id="next">What happens next</div>
+<ul class="steps">
+<li><div class="num">1</div><div><b id="s1t">Confirmation</b><span id="s1d">We'll call or text you from a local number to confirm your appointment. Please keep your phone nearby.</span></div></li>
+<li><div class="num">2</div><div><b id="s2t">Your free water test</b><span id="s2d">Our specialist will test a sample of your tap water at your home in about 30 minutes and explain the results.</span></div></li>
+<li><div class="num">3</div><div><b id="s3t">Review your options</b><span id="s3d">If you're interested, we'll go over water treatment options for your home. There's no obligation.</span></div></li>
+</ul>
+</div></div>
+<p class="disclaimer" id="foot">Need to change your appointment? Reply to our confirmation text and we'll reschedule it for you. Aquafeel Solutions is a private water treatment company.</p>
+</main>
+<script>
+const tr={
+en:{h1:'Thank you, your request was received',h1n:'Thank you, {name}. Your request was received',desc:'An Aquafeel Solutions specialist will contact you shortly by phone or text to confirm your free in-home water test.',panel:'Appointment request',confLabel:'Requested date and time',at:'at',next:'What happens next',s1t:'Confirmation',s1d:"We'll call or text you from a local number to confirm your appointment. Please keep your phone nearby.",s2t:'Your free water test',s2d:'Our specialist will test a sample of your tap water at your home in about 30 minutes and explain the results.',s3t:'Review your options',s3d:"If you're interested, we'll go over water treatment options for your home. There's no obligation.",foot:"Need to change your appointment? Reply to our confirmation text and we'll reschedule it for you. Aquafeel Solutions is a private water treatment company."},
+es:{h1:'Gracias, recibimos su solicitud',h1n:'Gracias, {name}. Recibimos su solicitud',desc:'Un especialista de Aquafeel Solutions se comunicará con usted pronto por llamada o mensaje para confirmar su prueba de agua gratis en casa.',panel:'Solicitud de cita',confLabel:'Fecha y hora solicitadas',at:'a las',next:'Próximos pasos',s1t:'Confirmación',s1d:'Le llamaremos o enviaremos un mensaje desde un número local para confirmar su cita. Tenga su teléfono a la mano.',s2t:'Su prueba de agua gratis',s2d:'Nuestro especialista analizará una muestra del agua de su llave en su casa en unos 30 minutos y le explicará los resultados.',s3t:'Conozca sus opciones',s3d:'Si le interesa, le mostraremos opciones de tratamiento de agua para su hogar. Sin compromiso.',foot:'¿Necesita cambiar su cita? Responda a nuestro mensaje de confirmación y la reprogramamos. Aquafeel Solutions es una empresa privada de tratamiento de agua.'}
+};
+let b={};try{b=JSON.parse(sessionStorage.getItem('aqf_booking')||'{}')}catch(_){}
+const ql=new URLSearchParams(location.search).get('lang');
+const lang=(ql==='es'||ql==='en')?ql:(b.lang||'en');const t=tr[lang];document.documentElement.lang=lang;
+['desc','panel','confLabel','next','s1t','s1d','s2t','s2d','s3t','s3d','foot'].forEach(k=>document.getElementById(k).textContent=t[k]);
+document.getElementById('h1').textContent=b.first?t.h1n.replace('{name}',b.first):t.h1;
+if(b.date&&b.time)document.getElementById('when').textContent=`${b.date} ${t.at} ${b.time}`;else document.getElementById('confirm').style.display='none';
+</script>
+</body></html>

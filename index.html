@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aquafeel Solutions — Free Water Test Scheduling</title>
+<style>
+:root{--blue:#2e3192;--navy:#1f2270;--ink:#20252c;--muted:#526172;--line:#d6dce3;--bg:#f5f7f9;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:16px/1.48 Arial,Helvetica,sans-serif;color:var(--ink)}button,input{font:inherit}button{cursor:pointer}
+header{background:#fff;border-bottom:4px solid var(--blue)}header .head{max-width:900px;margin:auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{height:44px;width:auto;display:block}.logo-fallback{display:none;align-items:center;gap:8px;font-weight:700;font-size:23px}
+.lang-switch{background:none;border:1px solid var(--line);color:var(--muted);font-size:13px;font-weight:700;padding:6px 12px}
+main{max-width:820px;margin:30px auto 65px;padding:0 18px}.intro{margin:0 0 22px}h1{font-size:32px;line-height:1.17;margin:0 0 12px;letter-spacing:-.5px}p{margin:0}.desc{font-size:16px;color:#3f4853;max-width:750px}.desc a{color:var(--blue);font-weight:700}
+.panel{border:1px solid var(--line);background:white;box-shadow:0 1px 2px #19314c0c}.panel-head{background:#f8f9fa;padding:18px 24px;border-bottom:1px solid var(--line);font-size:19px;font-weight:700}.content{padding:24px}
+.info{border-left:4px solid var(--blue);background:#eef0fb;padding:12px 15px;font-size:14px;margin-bottom:23px}
+.section-title{font-size:18px;font-weight:700;margin:0 0 14px}.section-note{font-size:14px;color:var(--muted);margin:-8px 0 14px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:17px 18px}.field.wide{grid-column:1/-1}
+label{display:block;font-weight:700;font-size:14px;margin-bottom:6px}
+input[type=text],input[type=tel],input[type=email]{display:block;width:100%;border:1px solid #84909b;border-radius:2px;background:#fff;padding:11px 12px;outline-offset:2px}input:focus{outline:2px solid var(--blue)}
+.hint{font-weight:400;color:var(--muted);font-size:12px}
+.radio-row{display:flex;gap:24px;align-items:center;min-height:45px}.radio-row label{font-weight:400;font-size:15px;display:flex;gap:8px;align-items:center;margin:0}
+.divider{height:1px;background:var(--line);margin:26px 0}
+.days{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin:13px 0 17px}
+.day{min-height:78px;background:#fff;border:1px solid #a7b4c0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#273646}
+.day strong{font-size:23px;line-height:1.1}.day small{font-size:12px;text-transform:uppercase;letter-spacing:.4px}
+.day:disabled{background:#f0f1f2;color:#929aa3;border-color:#e0e3e6;cursor:not-allowed}
+.day.active,.slot.active{background:var(--navy);border-color:var(--navy);color:#fff}
+.slots{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+.slot{border:1px solid #9a9dd0;background:white;color:var(--blue);padding:10px 4px;font-size:13px;font-weight:700;border-radius:2px}
+.slot:disabled{background:#f0f1f2;color:#929aa3;border:1px solid #e0e3e6;text-decoration:line-through;cursor:not-allowed}
+.legend{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin:14px 0 0;font-size:12px;color:#65717e}
+.swatch{width:12px;height:12px;display:inline-block;border:1px solid #9da8b2;margin-right:5px;vertical-align:-1px}.swatch.busy{background:#e8eaec}.swatch.free{background:#fff}
+.primary{background:var(--blue);border:1px solid var(--blue);color:white;font-size:16px;font-weight:700;padding:13px 24px}.primary:hover{background:var(--navy)}.primary:disabled{background:#aaa;border-color:#aaa;cursor:wait}
+.submit{margin-top:23px;display:flex;flex-wrap:wrap;align-items:center;gap:14px;justify-content:space-between}
+.privacy{font-size:12px;color:#697581;max-width:440px}
+.error{display:none;border-left:4px solid #b4332a;background:#fdf0ee;padding:12px 15px;margin-top:18px;font-size:14px}
+.disclaimer{font-size:12px;color:#606c77;line-height:1.5;margin:20px 3px}
+.overlay{position:fixed;inset:0;background:rgba(15,18,60,.66);display:grid;place-items:center;z-index:99;padding:18px}
+.modal{background:white;border-top:6px solid var(--blue);width:min(100%,410px);box-shadow:0 18px 50px #0004;padding:30px 28px;text-align:center}
+.modal img{height:40px;margin:0 auto 14px;display:block}.modal h2{font-size:25px;margin:0 0 8px}.modal p{font-size:15px;color:var(--muted);margin-bottom:22px}
+.lang-buttons{display:grid;grid-template-columns:1fr 1fr;gap:12px}.lang-buttons button{border:1px solid var(--blue);background:#fff;color:var(--navy);padding:15px;font-weight:700;font-size:17px}.lang-buttons button:hover{background:#eef0fb}
+body.modal-open{overflow:hidden}
+@media(max-width:620px){header .head{padding:14px 18px}.logo{height:36px}main{margin:23px auto 42px}h1{font-size:28px}.content{padding:18px}.panel-head{padding:15px 18px}.days{grid-template-columns:repeat(3,1fr)}.slots{grid-template-columns:repeat(2,1fr)}.fields{grid-template-columns:1fr}.submit{align-items:stretch;flex-direction:column}.primary{width:100%}}
+</style>
+</head>
+<body class="modal-open">
+<header><div class="head">
+  <div><img class="logo" src="aquafeel-logo.png" alt="Aquafeel Solutions" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="logo-fallback"><svg width="24" height="31" viewBox="0 0 28 36" aria-hidden="true"><path d="M14 0C14 0 0 15 0 22a14 14 0 0 0 28 0C28 15 14 0 14 0z" fill="#2e3192"/></svg>Aquafeel Solutions</div></div>
+  <button type="button" class="lang-switch" id="langSwitch">ES</button>
+</div></header>
+<main>
+<section class="intro"><h1 data-i18n="title">Schedule your free water test</h1><p class="desc" data-i18n-html="intro">According to <a href="https://www.ewg.org/tapwater/" target="_blank" rel="noopener">EWG's Tap Water Database</a>, public water systems across the country have reported contaminants above EWG's health guidelines, which are stricter than federal legal limits. See what has been reported for your area, then let an Aquafeel Solutions specialist test your home's water for free and review the results with you, along with our water treatment options. No cost and no obligation.</p></section>
+<div class="panel"><div class="panel-head" data-i18n="panel">In-home water test appointment</div><div class="content">
+<div class="info"><strong data-i18n="infoHead">Got our mailer?</strong> <span data-i18n="infoBody">Complete the information below and choose a time for your free in-home water test with Aquafeel Solutions.</span></div>
+<form id="form" novalidate>
+<div class="section-title" data-i18n="contact">Property and contact information</div>
+<div class="fields">
+<div class="field wide"><label for="code"><span data-i18n="code">Mailer code</span> <span class="hint" data-i18n="optional">(optional)</span></label><input id="code" name="code" type="text" placeholder="Code from your mailer"></div>
+<div class="field"><label for="first" data-i18n="first">First name</label><input id="first" name="first" type="text" autocomplete="given-name" required></div>
+<div class="field"><label for="last" data-i18n="last">Last name</label><input id="last" name="last" type="text" autocomplete="family-name" required></div>
+<div class="field"><label for="phone" data-i18n="phone">Phone number</label><input id="phone" name="phone" type="tel" autocomplete="tel" required></div>
+<div class="field"><label for="email"><span data-i18n="email">Email</span> <span class="hint" data-i18n="optional">(optional)</span></label><input id="email" name="email" type="email" autocomplete="email"></div>
+<div class="field wide"><label for="address" data-i18n="address">Property address</label><input id="address" name="address" type="text" autocomplete="street-address" required></div>
+<div class="field"><label for="city" data-i18n="city">City</label><input id="city" name="city" type="text" autocomplete="address-level2" required></div>
+<div class="field"><label for="zip" data-i18n="zip">ZIP code</label><input id="zip" name="zip" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="5" required></div>
+<div class="field wide"><label data-i18n="owner">Are you the homeowner?</label><div class="radio-row"><label><input name="owner" type="radio" value="yes" required> <span data-i18n="yes">Yes</span></label><label><input name="owner" type="radio" value="no"> <span data-i18n="no">No</span></label></div></div>
+</div>
+<div class="divider"></div>
+<div class="section-title" data-i18n="appointment">Select an appointment</div><p class="section-note" data-i18n="window">Choose a date from today through the next 5 days. Appointments require at least 12 hours' notice. Times shown in Eastern Time.</p>
+<div class="days" id="days" role="group" aria-label="Appointment dates"></div>
+<label data-i18n="time">Available times</label><div class="slots" id="slots" role="group" aria-label="Appointment times"></div>
+<div class="legend"><span><i class="swatch free"></i><span data-i18n="available">Available</span></span><span><i class="swatch busy"></i><span data-i18n="unavailable">Unavailable</span></span></div>
+<div class="submit"><span class="privacy" data-i18n="privacy">By requesting an appointment, you agree that Aquafeel Solutions may call or text you about it. Msg &amp; data rates may apply. Reply STOP to opt out.</span><button class="primary" type="submit" id="submitBtn" data-i18n="submit">Request appointment</button></div>
+<div class="error" id="error" role="alert"></div>
+</form>
+</div></div>
+<p class="disclaimer" data-i18n="footer">Aquafeel Solutions is a private water treatment company. The free in-home water test is performed by an Aquafeel specialist, who may also present water treatment products during the visit. A basic home water test does not check for every possible contaminant.</p>
+</main>
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal"><img src="aquafeel-logo.png" alt="Aquafeel Solutions" onerror="this.remove()"><h2 id="modalTitle">English or Spanish?</h2><p>Select your preferred language / Seleccione su idioma.</p><div class="lang-buttons"><button type="button" id="english">English</button><button type="button" id="spanish">Español</button></div></div></div>
+<script>
+// ---- CONFIG ----
+const ZUOPS_URL='https://api.zuops.com/functions/v1/leads-inbound-webhook/dae53079179af71ba3e155b638408058ddf9';
+const CALENDAR_ID='eb22ab7f-3729-4fd4-a09d-48a62356c969';
+const TZ='America/New_York';
+const OPEN=9*60, CLOSE=20*60, STEP=30, LEAD_MS=12*60*60*1000, DAYS=6;
+const THANK_YOU='thank-you.html';
+
+const tr={
+en:{title:'Schedule your free water test',intro:"According to <a href=\"https://www.ewg.org/tapwater/\" target=\"_blank\" rel=\"noopener\">EWG's Tap Water Database</a>, public water systems across the country have reported contaminants above EWG's health guidelines, which are stricter than federal legal limits. See what has been reported for your area, then let an Aquafeel Solutions specialist test your home's water for free and review the results with you, along with our water treatment options. No cost and no obligation.",panel:'In-home water test appointment',infoHead:'Got our mailer?',infoBody:'Complete the information below and choose a time for your free in-home water test with Aquafeel Solutions.',contact:'Property and contact information',code:'Mailer code',codePh:'Code from your mailer',optional:'(optional)',first:'First name',last:'Last name',phone:'Phone number',email:'Email',address:'Property address',city:'City',zip:'ZIP code',owner:'Are you the homeowner?',yes:'Yes',no:'No',appointment:'Select an appointment',window:"Choose a date from today through the next 5 days. Appointments require at least 12 hours' notice. Times shown in Eastern Time.",time:'Available times',available:'Available',unavailable:'Unavailable',privacy:'By requesting an appointment, you agree that Aquafeel Solutions may call or text you about it. Msg & data rates may apply. Reply STOP to opt out.',submit:'Request appointment',sending:'Sending…',footer:'Aquafeel Solutions is a private water treatment company. The free in-home water test is performed by an Aquafeel specialist, who may also present water treatment products during the visit. A basic home water test does not check for every possible contaminant.',missing:'Please complete the required fields and select an available date and time.',fail:"We couldn't send your request. Please check your connection and try again.",notice:"Requires 12 hours' notice",week:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],locale:'en-US'},
+es:{title:'Programe su prueba de agua gratis',intro:'Según la base de datos <a href="https://www.ewg.org/tapwater/" target="_blank" rel="noopener">Tap Water Database de EWG</a>, sistemas públicos de agua en todo el país han reportado contaminantes por encima de las guías de salud de EWG, que son más estrictas que los límites legales federales. Vea lo que se ha reportado en su zona y deje que un especialista de Aquafeel Solutions analice gratis el agua de su casa y revise los resultados con usted, junto con nuestras opciones de tratamiento de agua. Sin costo y sin compromiso.',panel:'Cita para prueba de agua en casa',infoHead:'¿Recibió nuestro folleto?',infoBody:'Complete los datos y elija un horario para su prueba de agua gratis en casa con Aquafeel Solutions.',contact:'Datos de la propiedad y contacto',code:'Código del folleto',codePh:'Código de su folleto',optional:'(opcional)',first:'Nombre',last:'Apellido',phone:'Teléfono',email:'Correo electrónico',address:'Dirección de la vivienda',city:'Ciudad',zip:'Código postal',owner:'¿Es propietario de la vivienda?',yes:'Sí',no:'No',appointment:'Seleccione una cita',window:'Elija una fecha entre hoy y los próximos 5 días. Las citas requieren al menos 12 horas de anticipación. Horarios en hora del Este.',time:'Horarios disponibles',available:'Disponible',unavailable:'No disponible',privacy:'Al solicitar una cita, acepta que Aquafeel Solutions le llame o envíe mensajes sobre ella. Pueden aplicar tarifas de mensajes y datos. Responda STOP para no recibir más.',submit:'Solicitar cita',sending:'Enviando…',footer:'Aquafeel Solutions es una empresa privada de tratamiento de agua. La prueba de agua gratis la realiza un especialista de Aquafeel, quien también puede presentarle productos de tratamiento de agua durante la visita. Una prueba básica no detecta todos los contaminantes posibles.',missing:'Complete los campos obligatorios y seleccione una fecha y un horario disponibles.',fail:'No pudimos enviar su solicitud. Revise su conexión e intente de nuevo.',notice:'Requiere 12 horas de anticipación',week:['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],locale:'es-US'}
+};
+
+let lang='en',selectedDay=null,selectedSlot=null;
+
+// ---- Eastern Time helpers ----
+function etParts(date){const p={};new Intl.DateTimeFormat('en-US',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date).forEach(x=>p[x.type]=x.value);return p}
+function etOffset(y,m,d){const s=new Intl.DateTimeFormat('en-US',{timeZone:TZ,timeZoneName:'longOffset'}).formatToParts(new Date(Date.UTC(y,m-1,d,17))).find(x=>x.type==='timeZoneName').value;const mm=s.match(/GMT([+-]\d{2}):?(\d{2})?/);return mm?mm[1]+':'+(mm[2]||'00'):'-05:00'}
+function getDates(){const t=etParts(new Date());return Array.from({length:DAYS},(_,i)=>{const d=new Date(Date.UTC(+t.year,+t.month-1,+t.day+i,12));return{y:d.getUTCFullYear(),m:d.getUTCMonth()+1,d:d.getUTCDate(),dow:d.getUTCDay()}})}
+const slotMinutes=Array.from({length:(CLOSE-OPEN)/STEP},(_,i)=>OPEN+i*STEP);
+const pad=n=>String(n).padStart(2,'0');
+function isoFor(di,si){const x=getDates()[di],min=slotMinutes[si];return `${x.y}-${pad(x.m)}-${pad(x.d)}T${pad(Math.floor(min/60))}:${pad(min%60)}:00${etOffset(x.y,x.m,x.d)}`}
+function bookable(di,si){return new Date(isoFor(di,si)).getTime()>=Date.now()+LEAD_MS}
+function hasBookable(di){return slotMinutes.some((_,i)=>bookable(di,i))}
+function timeLabel(min){const h=Math.floor(min/60),m=min%60;return `${((h+11)%12)+1}:${pad(m)} ${h<12?'AM':'PM'}`}
+function dateLabel(x){return new Date(Date.UTC(x.y,x.m-1,x.d,12)).toLocaleDateString(tr[lang].locale,{weekday:'long',month:'long',day:'numeric',timeZone:'UTC'})}
+
+// ---- Render ----
+function updateLanguage(l){
+  lang=l;document.documentElement.lang=l;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const v=tr[l][el.dataset.i18n];if(v)el.textContent=v});
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{const v=tr[l][el.dataset.i18nHtml];if(v)el.innerHTML=v});
+  document.getElementById('code').placeholder=tr[l].codePh;
+  document.getElementById('langSwitch').textContent=l==='es'?'EN':'ES';
+  renderDays();renderSlots();
+  const o=document.getElementById('overlay');o.hidden=true;o.style.display='none';document.body.classList.remove('modal-open');
+}
+function renderDays(){
+  const root=document.getElementById('days');root.innerHTML='';const dates=getDates();
+  if(selectedDay===null||!hasBookable(selectedDay)){selectedDay=dates.findIndex((_,i)=>hasBookable(i));selectedSlot=null}
+  dates.forEach((x,i)=>{
+    const b=document.createElement('button');b.type='button';b.className='day'+(i===selectedDay?' active':'');
+    b.disabled=!hasBookable(i);b.setAttribute('aria-pressed',i===selectedDay?'true':'false');
+    const mon=new Date(Date.UTC(x.y,x.m-1,x.d,12)).toLocaleDateString(tr[lang].locale,{month:'short',timeZone:'UTC'});
+    b.innerHTML=`<small>${tr[lang].week[x.dow]}</small><strong>${x.d}</strong><small>${mon}</small>`;
+    b.addEventListener('click',()=>{selectedDay=i;selectedSlot=null;renderDays();renderSlots()});root.appendChild(b);
+  });
+}
+function renderSlots(){
+  const root=document.getElementById('slots');root.innerHTML='';
+  slotMinutes.forEach((min,i)=>{
+    const b=document.createElement('button');b.type='button';b.textContent=timeLabel(min);
+    b.className='slot'+(i===selectedSlot?' active':'');
+    b.disabled=selectedDay===null||selectedDay<0||!bookable(selectedDay,i);
+    if(b.disabled)b.title=tr[lang].notice;
+    b.setAttribute('aria-pressed',i===selectedSlot?'true':'false');
+    b.addEventListener('click',()=>{selectedSlot=i;renderSlots()});root.appendChild(b);
+  });
+}
+
+// ---- Submit to Zuops ----
+function showError(msg){const e=document.getElementById('error');e.textContent=msg;e.style.display='block';e.scrollIntoView({behavior:'smooth',block:'nearest'})}
+async function send(payload){
+  try{
+    const r=await fetch(ZUOPS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+  }catch(err){
+    if(err instanceof TypeError){await fetch(ZUOPS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(payload)})}
+    else throw err;
+  }
+}
+document.getElementById('form').addEventListener('submit',async e=>{
+  e.preventDefault();document.getElementById('error').style.display='none';
+  const f=e.target,v=n=>(f.elements[n].value||'').trim();
+  const owner=(f.querySelector('input[name=owner]:checked')||{}).value;
+  if(selectedSlot!==null&&!bookable(selectedDay,selectedSlot)){selectedSlot=null;renderDays();renderSlots()}
+  if(!f.checkValidity()||!owner||selectedDay===null||selectedDay<0||selectedSlot===null){f.reportValidity();showError(tr[lang].missing);return}
+  const x=getDates()[selectedDay];
+  const qs=new URLSearchParams(location.search);
+  const extras=[`Homeowner: ${owner==='yes'?'Yes':'No'}`,`Language: ${lang==='es'?'Spanish':'English'}`];
+  if(v('code'))extras.push(`Mailer code: ${v('code')}`);
+  ['utm_source','utm_medium','utm_campaign','utm_content'].forEach(k=>{if(qs.get(k))extras.push(`${k}: ${qs.get(k)}`)});
+  const payload={
+    full_name:`${v('first')} ${v('last')}`,phone:v('phone'),email:v('email'),
+    address:v('address'),city:v('city'),zip:v('zip'),
+    inquiry:'Free in-home water test (mailer QR)',notes:extras.join(' | '),
+    appointment_at:isoFor(selectedDay,selectedSlot),appointment_duration:'30',appointment_timezone:TZ,
+    appointment_calendar:CALENDAR_ID,appointment_title:'Free in-home water test',appointment_notes:extras.join(' | ')
+  };
+  const btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent=tr[lang].sending;
+  try{
+    await send(payload);
+    try{sessionStorage.setItem('aqf_booking',JSON.stringify({first:v('first'),date:dateLabel(x),time:timeLabel(slotMinutes[selectedSlot]),lang}))}catch(_){}
+    location.href=THANK_YOU+'?lang='+lang;
+  }catch(err){btn.disabled=false;btn.textContent=tr[lang].submit;showError(tr[lang].fail)}
+});
+
+document.getElementById('english').onclick=()=>updateLanguage('en');
+document.getElementById('spanish').onclick=()=>updateLanguage('es');
+document.getElementById('langSwitch').onclick=()=>updateLanguage(lang==='es'?'en':'es');
+renderDays();renderSlots();
+</script>
+</body></html>
